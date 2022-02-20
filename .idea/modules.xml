@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/junior/junior.iml" filepath="$PROJECT_DIR$/junior/junior.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/lineate.iml" filepath="$PROJECT_DIR$/.idea/lineate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/middle/middle.iml" filepath="$PROJECT_DIR$/middle/middle.iml" />
     </modules>
   </component>
 </project>
