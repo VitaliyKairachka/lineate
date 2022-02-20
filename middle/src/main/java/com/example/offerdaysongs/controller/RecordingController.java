@@ -1,19 +1,16 @@
 package com.example.offerdaysongs.controller;
 
 import com.example.offerdaysongs.dto.CompanyDto;
+import com.example.offerdaysongs.dto.CopyrightDto;
 import com.example.offerdaysongs.dto.RecordingDto;
 import com.example.offerdaysongs.dto.SingerDto;
-import com.example.offerdaysongs.dto.requests.CreateCompanyRequest;
 import com.example.offerdaysongs.dto.requests.CreateRecordingRequest;
+import com.example.offerdaysongs.model.Copyright;
 import com.example.offerdaysongs.model.Recording;
 import com.example.offerdaysongs.service.RecordingService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +25,7 @@ public class RecordingController {
     }
 
     @GetMapping("/")
-    public List<RecordingDto> getAll(){
+    public List<RecordingDto> getAll() {
         return recordingService.getAll().stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -45,16 +42,38 @@ public class RecordingController {
         return convertToDto(recordingService.create(request));
     }
 
-    private RecordingDto convertToDto(Recording recording)
-    {
+    private RecordingDto convertToDto(Recording recording) {
         var singer = recording.getSinger();
         return new RecordingDto(recording.getId(),
-                                recording.getTitle(),
-                                recording.getVersion(),
-                                recording.getReleaseTime(),
-                                singer != null ? new SingerDto(singer.getId(), singer.getName()) : null);
+                recording.getTitle(),
+                recording.getVersion(),
+                recording.getReleaseTime(),
+                singer != null ? new SingerDto(singer.getId(), singer.getName()) : null,
+                convertListToDtoList(recording.getCopyrights()));
+    }
 
-
-
+    private List<CopyrightDto> convertListToDtoList(List<Copyright> copyrights) {
+        List<CopyrightDto> copyrightDtos = new ArrayList<>();
+        for (var copyright : copyrights) {
+            var company = copyright.getCompany();
+            var recording = copyright.getRecording();
+            var singer = copyright.getRecording().getSinger();
+            var copyrightDto = new CopyrightDto(
+                    copyright.getId(),
+                    company != null ? new CompanyDto(company.getId(), company.getName()) : null,
+                    copyright.getValidity(),
+                    copyright.getPrice(),
+                    recording != null ? new RecordingDto(
+                            recording.getId(),
+                            recording.getTitle(),
+                            recording.getVersion(),
+                            recording.getReleaseTime(),
+                            singer != null ? new SingerDto(singer.getId(), singer.getName()) : null,
+                            null
+                    ) : null
+            );
+            copyrightDtos.add(copyrightDto);
+        }
+        return copyrightDtos;
     }
 }

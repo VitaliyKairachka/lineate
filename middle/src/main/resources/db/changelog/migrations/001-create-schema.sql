@@ -4,6 +4,12 @@ CREATE TABLE singer
     name VARCHAR(256)
 );
 
+CREATE TABLE company
+(
+    id           BIGSERIAL PRIMARY KEY,
+    name         VARCHAR(256)
+);
+
 CREATE TABLE recording
 (
     id           BIGSERIAL PRIMARY KEY,
@@ -14,9 +20,15 @@ CREATE TABLE recording
     singer_id    BIGINT REFERENCES singer (id)
 );
 
-CREATE TABLE company
+CREATE TABLE copyright
 (
     id           BIGSERIAL PRIMARY KEY,
-    name         VARCHAR(256)
+    company_id   BIGINT REFERENCES company (id),
+    validity     BIGINT,
+    price        BIGINT,
+    recording_id BIGINT,
+    FOREIGN KEY (recording_id) REFERENCES recording (id)
 );
+
+
 
