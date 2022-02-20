@@ -1,5 +1,6 @@
 package com.example.offerdaysongs.dto.requests;
 
+import com.example.offerdaysongs.model.Copyright;
 import com.example.offerdaysongs.model.Singer;
 import lombok.Data;
 
@@ -12,4 +13,5 @@ public class CreateRecordingRequest {
     String version;
     ZonedDateTime releaseTime;
     Singer singer;
+    List<Copyright> copyrights;
 }
